@@ -1,7 +1,7 @@
 package corecommands
 
 import (
-	"github.com/recyvan/gotsgzengine/internal/command"
+	"github.com/recyvan/smf/internal/command"
 )
 
 var (

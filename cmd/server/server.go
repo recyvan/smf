@@ -4,7 +4,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"github.com/recyvan/gotsgzengine/internal/command"
+	"github.com/recyvan/smf/internal/command"
 	"io/ioutil"
 	"net"
 	"os"

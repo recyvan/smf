@@ -6,7 +6,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/recyvan/gotsgzengine/internal/command"
+	"github.com/recyvan/smf/internal/command"
 )
 
 // CommandWrapper 包裹器，用于包装命令和任务管理器

@@ -5,10 +5,16 @@
 - 本项目支持本地运行和远程运运行。
 - 可以通过安装golang环境，下载本项目代码，执行`go mod tidy`安装依赖包，
 - 然后执行 `go run localserver/main.go` main.go` 启动本地运行模式，
-- 或在cmd下执行`go run server/main.go server.go engine_init.go -sc server.crt -sk server.key，-p 8080`运行服务端
-- 执行 `go run client/main.go conn.go -h 127.0.0.1 -p 8080 -u 1234 -p 1234` 运行客户端
+- 远程模式：生成证书：
+- `openssl genrsa -out server.key 2048`
+- `openssl req -new -key server.key -out server.csr`
+- `openssl x509 -req -days 365 -in server.csr -signkey server.key -out server.crt`
+- 或在cmd下执行`go run cmd/server/main.go cmd/server/server.go cmd/server/engine_init.go -sc server.crt -sk server.key -p 8080
+`运行服务端
+- 执行 `go run cmd/client/main.go cmd/client/conn.go -h 127.0.0.1:8080  -u 1234 -p 1234` 运行客户端
 - 其中客户端和服务端均支持多端连接，客户端运行执行`change conn.ID`切换连接，服务端运行多个连接共同操作一台服务器。
 - 或者编译成可执行文件，直接运行即可。
+- 用户口令存放位置默认为：token.text,内容格式为：`用户名:密码`
 
 ## 已包含功能
 
@@ -27,7 +33,7 @@ package plugins
 # 在 plugins目录下执行->建议进行目录执行
 go mod init datetime
 # 添加主项目依赖
-go mod edit -require github.com/recyvan/gotsgzengine@latest
+go mod edit -require github.com/recyvan/smf@latest
 执行
 go build -buildmode=plugin -o ./datetime.so datetime.go
 确保 datetime.so 在 plugins 目录下
@@ -35,7 +41,7 @@ go build -buildmode=plugin -o ./datetime.so datetime.go
 import (
 	"context"
 	"fmt"
-	"github.com/recyvan/gotsgzengine/internal/command"
+	"github.com/recyvan/smf/internal/command"
 	"io"
 	"os/user"
 	"time"

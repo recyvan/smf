@@ -3,7 +3,7 @@ package corecommands
 import (
 	"context"
 	"fmt"
-	"github.com/recyvan/gotsgzengine/internal/command"
+	"github.com/recyvan/smf/internal/command"
 	"io"
 	"sort"
 	"strings"

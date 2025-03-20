@@ -1,14 +1,5 @@
 package plugins
 
-/*
-# 在 plugins目录下执行->建议进行目录执行
-go mod init datetime
-# 添加主项目依赖
-go mod edit -require github.com/recyvan/smf@latest
-执行
-go build -buildmode=plugin -o ./datetime.so datetime.go
-确保 datetime.so 在 plugins 目录下
-*/
 import (
 	"context"
 	"fmt"
@@ -18,14 +9,13 @@ import (
 	"time"
 )
 
-// Plugin 导出的插件变量（必须导出这个变量名）
-var Plugin plugin
+type PluginCommand struct {
+}
 
-// plugin 实现 command.CommandProvider 接口
-type plugin struct{}
-
-// ProvideCommands 返回插件提供的命令列表
-func (p plugin) ProvideCommands() []command.Ecommand {
+func NewPluginCommand() *PluginCommand {
+	return &PluginCommand{}
+}
+func (p *PluginCommand) ProvideCommands() []command.Ecommand {
 	return []command.Ecommand{
 		{
 			Name:        "datetime",                                    // 命令名称
@@ -39,7 +29,7 @@ func (p plugin) ProvideCommands() []command.Ecommand {
 }
 
 // handleDateTime 处理 datetime 命令
-func (p plugin) handleDateTime(rw io.ReadWriter, ctx context.Context, args []string) ([]byte, error) {
+func (p *PluginCommand) handleDateTime(rw io.ReadWriter, ctx context.Context, args []string) ([]byte, error) {
 	// 获取当前时间
 	now := time.Now().Local()
 

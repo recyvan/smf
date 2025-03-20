@@ -2,7 +2,7 @@ package plugin
 
 import (
 	"fmt"
-	"github.com/recyvan/gotsgzengine/internal/command"
+	"github.com/recyvan/smf/internal/command"
 	"os"
 	"path/filepath"
 	"plugin"

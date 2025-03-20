@@ -1,0 +1,52 @@
+.PHONY: all build clean
+
+# 版本信息
+VERSION := 1.0.0
+BUILD_TIME := 2025-03-20-03:15:06
+
+# 编译参数
+LDFLAGS := -X main.Version=$(VERSION) -X main.BuildTime=$(BUILD_TIME)
+
+# 输出目录
+OUT_DIR := output/bin
+
+all: build
+
+build: server client localserver
+
+server:
+	@mkdir -p $(OUT_DIR)
+	go build -ldflags "$(LDFLAGS)" -o $(OUT_DIR)/server ./cmd/server/main.go
+
+client:
+	@mkdir -p $(OUT_DIR)
+	go build -ldflags "$(LDFLAGS)" -o $(OUT_DIR)/client ./cmd/client/main.go
+
+localserver:
+	@mkdir -p $(OUT_DIR)
+	go build -ldflags "$(LDFLAGS)" -o $(OUT_DIR)/localserver ./localserver/main.go
+
+# 跨平台编译
+.PHONY: build-all
+build-all: build-linux build-windows build-darwin
+
+build-linux:
+	@mkdir -p $(OUT_DIR)/linux
+	GOOS=linux GOARCH=amd64 go build -o $(OUT_DIR)/linux/server ./cmd/server/main.go
+	GOOS=linux GOARCH=amd64 go build -o $(OUT_DIR)/linux/client ./cmd/client/main.go
+	GOOS=linux GOARCH=amd64 go build -o $(OUT_DIR)/linux/localserver ./cmd/localserver/main.go
+
+build-windows:
+	@mkdir -p $(OUT_DIR)/windows
+	GOOS=windows GOARCH=amd64 go build -o $(OUT_DIR)/windows/server.exe ./cmd/server/main.go
+	GOOS=windows GOARCH=amd64 go build -o $(OUT_DIR)/windows/client.exe ./cmd/client/main.go
+	GOOS=windows GOARCH=amd64 go build -o $(OUT_DIR)/windows/localserver.exe ./cmd/localserver/main.go
+
+build-darwin:
+	@mkdir -p $(OUT_DIR)/darwin
+	GOOS=darwin GOARCH=amd64 go build -o $(OUT_DIR)/darwin/server ./cmd/server/main.go
+	GOOS=darwin GOARCH=amd64 go build -o $(OUT_DIR)/darwin/client ./cmd/client/main.go
+	GOOS=darwin GOARCH=amd64 go build -o $(OUT_DIR)/darwin/localserver ./cmd/localserver/main.go
+
+clean:
+	rm -rf $(OUT_DIR)

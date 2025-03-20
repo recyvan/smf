@@ -94,18 +94,34 @@ func (conn *Conn) Connect(addr, username, token string) {
 
 func (conn *Conn) handleServerMessages(UserConn net.Conn) {
 	serverScanner := bufio.NewScanner(UserConn)
+	fmt.Printf("@%s->", conn.activeID)
+	os.Stdout.Sync()
 	for serverScanner.Scan() {
 		serverData := serverScanner.Text()
-		conn.mu.Lock()
-		fmt.Printf("\r%s\n", serverData)
-		fmt.Printf("@%s->", conn.activeID)
-		os.Stdout.Sync()
-		conn.mu.Unlock()
+		if serverData != "\n" {
+			conn.mu.Lock()
+			fmt.Printf("\r%s\n", serverData)
+			//fmt.Printf("@%s->", conn.activeID)
+			os.Stdout.Sync()
+			conn.mu.Unlock()
+		} else {
+			conn.mu.Lock()
+			fmt.Printf("@%s->", conn.activeID)
+			os.Stdout.Sync()
+			conn.mu.Unlock()
+		}
+		//conn.mu.Lock()
+		//fmt.Printf("\r%s\n", serverData)
+		////fmt.Printf("@%s->", conn.activeID)
+		//os.Stdout.Sync()
+		//conn.mu.Unlock()
 	}
+	fmt.Printf("@%s->", conn.activeID)
+	os.Stdout.Sync()
 	if err := serverScanner.Err(); err != nil {
 		conn.mu.Lock()
 		fmt.Printf("[!] Error reading from server: %v\n", err)
-		fmt.Printf("@%s->", conn.activeID)
+		//fmt.Printf("@%s->", conn.activeID)
 		os.Stdout.Sync()
 		conn.mu.Unlock()
 	}

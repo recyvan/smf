@@ -4,38 +4,21 @@ import (
 	"bufio"
 	"context"
 	"fmt"
-	"github.com/recyvan/gotsgzengine/internal/command"
-	"github.com/recyvan/gotsgzengine/internal/command/plugin"
-	"github.com/recyvan/gotsgzengine/internal/commands/backgroundcommands"
-	"github.com/recyvan/gotsgzengine/internal/commands/corecommands"
-	"github.com/recyvan/gotsgzengine/internal/commands/customcommands"
+	"github.com/recyvan/smf/internal/command"
+	"github.com/recyvan/smf/internal/command/plugin"
+	"github.com/recyvan/smf/internal/commands/backgroundcommands"
+	"github.com/recyvan/smf/internal/commands/corecommands"
+	"github.com/recyvan/smf/internal/commands/customcommands"
+	"github.com/recyvan/smf/plugins"
 	"io"
 	"net"
 	"os"
-	"path/filepath"
 	"strings"
 )
 
 type ReadWriter struct {
 	Reader io.Reader
 	Writer io.Writer
-}
-
-func NewReadWriter(reader io.Reader, writer io.Writer) *ReadWriter {
-	return &ReadWriter{
-		Reader: reader,
-		Writer: writer,
-	}
-}
-
-// 实现 io.Reader 接口
-func (rw *ReadWriter) Read(p []byte) (n int, err error) {
-	return rw.Reader.Read(p)
-}
-
-// 实现 io.Writer 接口
-func (rw *ReadWriter) Write(p []byte) (n int, err error) {
-	return rw.Writer.Write(p)
 }
 
 // PluginCommandProvider 插件命令提供者
@@ -63,12 +46,16 @@ func enginInit() *command.LocalEngine {
 	// 创建并添加核心命令提供者
 	coreCommands := corecommands.NewCoreCommands(engine_1.CmdRegistry)
 	// 注册并包装命令
+	//注册未编译插件的命令
+	pluginCommands := plugins.NewPluginCommand()
+
 	// 添加提供者到自动注册器
 	engine_1.AutoReg.AddProvider(basicCommands)
 	engine_1.AutoReg.AddProvider(customCommands)
 	engine_1.AutoReg.AddProvider(coreCommands)
+	engine_1.AutoReg.AddProvider(pluginCommands)
 	// 加载插件
-	pluginDir := filepath.Join(".", "plugins")
+	pluginDir := "./plugins"
 	pluginLoader := plugin.NewPluginLoader(pluginDir)
 
 	if err := pluginLoader.LoadPlugins(); err != nil {
@@ -122,4 +109,20 @@ func Run(engine *command.LocalEngine, conn net.Conn) {
 			fmt.Fprintln(rw, "Type 'help' for available commands")
 		}
 	}
+}
+func NewReadWriter(reader io.Reader, writer io.Writer) *ReadWriter {
+	return &ReadWriter{
+		Reader: reader,
+		Writer: writer,
+	}
+}
+
+// 实现 io.Reader 接口
+func (rw *ReadWriter) Read(p []byte) (n int, err error) {
+	return rw.Reader.Read(p)
+}
+
+// 实现 io.Writer 接口
+func (rw *ReadWriter) Write(p []byte) (n int, err error) {
+	return rw.Writer.Write(p)
 }

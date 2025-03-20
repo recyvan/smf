@@ -1,4 +1,4 @@
-module github.com/recyvan/gotsgzengine
+module github.com/recyvan/smf
 
 go 1.24
 

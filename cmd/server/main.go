@@ -21,17 +21,18 @@
 
 package main
 
-import (
-	"flag"
-	"strconv"
-)
-
-func main() {
-	certFile := flag.String("sc", "server.crt", "Path to the server certificate")
-	keyFile := flag.String("sk", "server.key", "Path to the server key")
-	port := flag.Int("p", 8080, "Port to listen on")
-	flag.Parse()
+func test_main() {
 	serverconn := NewConn()
-	server_host := "0.0.0.0" + ":" + strconv.Itoa(*port)
-	serverconn.ListenAndServe(server_host, *certFile, *keyFile)
+	serverconn.ListenAndServe(":8080", "server.crt", "server.key")
+
+}
+func main() {
+	//certFile := flag.String("sc", "server.crt", "Path to the server certificate")
+	//keyFile := flag.String("sk", "server.key", "Path to the server key")
+	//port := flag.Int("p", 8080, "Port to listen on")
+	//flag.Parse()
+	//serverconn := NewConn()
+	//server_host := "0.0.0.0" + ":" + strconv.Itoa(*port)
+	//serverconn.ListenAndServe(server_host, *certFile, *keyFile)
+	test_main()
 }
