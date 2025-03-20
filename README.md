@@ -35,7 +35,7 @@ go mod init datetime
 # 添加主项目依赖
 go mod edit -require github.com/recyvan/smf@latest
 执行
-go build -buildmode=plugin -o ./datetime.so datetime.go
+go build -buildmode=plugins -o ./datetime.so datetime.go
 确保 datetime.so 在 plugins 目录下
 */
 import (
@@ -50,7 +50,7 @@ import (
 // Plugin 导出的插件变量（必须导出这个变量名）
 var Plugin plugin
 
-// plugin 实现 command.CommandProvider 接口
+// plugins 实现 command.CommandProvider 接口
 type plugin struct{}
 
 // ProvideCommands 返回插件提供的命令列表
@@ -60,7 +60,7 @@ func (p plugin) ProvideCommands() []command.Ecommand {
 			Name:        "datetime",                                    // 命令名称
 			Description: "Show current date/time and user information", // 命令描述
 			Usage:       "datetime",                                    // 命令用法
-			Type:        "plugin",                                      // 命令类型
+			Type:        "plugins",                                      // 命令类型
 			Background:  false,                                         // 是否支持后台运行
 			Handler:     p.handleDateTime,                              // 命令处理函数
 		},
@@ -87,7 +87,7 @@ func (p plugin) handleDateTime(rw io.ReadWriter, ctx context.Context, args []str
 	fmt.Fprint(rw, output)
 	return []byte(output), nil
 }
-
+go build -buildmode=plugin -o
 ```
 > 若脚本要实现后台运行的功能，请在接口中设置Background为true，可用于创建后台任务。
 并在Handler中实现后台运行的逻辑。func (rw io.ReadWriter, ctx context.Context, args []string) ([]byte, error)其中rw为脚本的标准输入输出，ctx为上下文，args为命令行参数。

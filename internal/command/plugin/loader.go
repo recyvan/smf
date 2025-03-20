@@ -26,7 +26,7 @@ func NewPluginLoader(pluginDir string) *PluginLoader {
 func (pl *PluginLoader) LoadPlugins() error {
 	// 确保插件目录存在
 	if err := os.MkdirAll(pl.pluginDir, 0755); err != nil {
-		return fmt.Errorf("failed to create plugin directory: %v", err)
+		return fmt.Errorf("failed to create plugins directory: %v", err)
 	}
 
 	// 遍历插件目录
@@ -38,14 +38,14 @@ func (pl *PluginLoader) LoadPlugins() error {
 		// 只处理 .so 文件
 		if !info.IsDir() && filepath.Ext(path) == ".so" {
 			if err := pl.loadPlugin(path); err != nil {
-				fmt.Printf("Warning: failed to load plugin %s: %v\n", path, err)
+				fmt.Printf("Warning: failed to load plugins %s: %v\n", path, err)
 			}
 		}
 		return nil
 	})
 
 	if err != nil {
-		return fmt.Errorf("error walking plugin directory: %v", err)
+		return fmt.Errorf("error walking plugins directory: %v", err)
 	}
 
 	return nil
@@ -55,7 +55,7 @@ func (pl *PluginLoader) LoadPlugins() error {
 func (pl *PluginLoader) loadPlugin(path string) error {
 	p, err := plugin.Open(path)
 	if err != nil {
-		return fmt.Errorf("failed to open plugin: %v", err)
+		return fmt.Errorf("failed to open plugins: %v", err)
 	}
 
 	// 查找 Plugin 符号
@@ -67,14 +67,14 @@ func (pl *PluginLoader) loadPlugin(path string) error {
 	// 类型断言
 	provider, ok := symbol.(command.CommandProvider)
 	if !ok {
-		return fmt.Errorf("invalid plugin type: Plugin symbol must implement CommandProvider interface")
+		return fmt.Errorf("invalid plugins type: Plugin symbol must implement CommandProvider interface")
 	}
 
 	// 获取并存储命令
 	commands := provider.ProvideCommands()
 	pl.commands = append(pl.commands, commands...)
 
-	fmt.Printf("Successfully loaded plugin: %s\n", filepath.Base(path))
+	fmt.Printf("Successfully loaded plugins: %s\n", filepath.Base(path))
 	return nil
 }
 

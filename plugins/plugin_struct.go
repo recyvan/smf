@@ -21,7 +21,7 @@ func (p *PluginCommand) ProvideCommands() []command.Ecommand {
 			Name:        "datetime",                                    // 命令名称
 			Description: "Show current date/time and user information", // 命令描述
 			Usage:       "datetime",                                    // 命令用法
-			Type:        "plugin",                                      // 命令类型
+			Type:        "plugins",                                     // 命令类型
 			Background:  false,                                         // 是否支持后台运行
 			Handler:     p.handleDateTime,                              // 命令处理函数
 		},

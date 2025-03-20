@@ -4,9 +4,9 @@ package plugins
 # 在 plugins目录下执行->建议进行目录执行
 go mod init datetime
 # 添加主项目依赖
-go mod edit -require github.com/recyvan/smf@latest
+go mod edit -require github.com/recyvan/smf/internal/command@latest
 执行
-go build -buildmode=plugin -o ./datetime.so datetime.go
+go build -buildmode=plugins -o ./datetime.so datetime.go
 确保 datetime.so 在 plugins 目录下
 */
 import (
@@ -31,7 +31,7 @@ func (p plugin) ProvideCommands() []command.Ecommand {
 			Name:        "datetime",                                    // 命令名称
 			Description: "Show current date/time and user information", // 命令描述
 			Usage:       "datetime",                                    // 命令用法
-			Type:        "plugin",                                      // 命令类型
+			Type:        "plugins",                                     // 命令类型
 			Background:  false,                                         // 是否支持后台运行
 			Handler:     p.handleDateTime,                              // 命令处理函数
 		},

@@ -5,7 +5,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/recyvan/smf/internal/command"
-	"github.com/recyvan/smf/internal/command/plugin"
+	pc "github.com/recyvan/smf/internal/command/plugin"
 	"github.com/recyvan/smf/internal/commands/backgroundcommands"
 	"github.com/recyvan/smf/internal/commands/corecommands"
 	"github.com/recyvan/smf/internal/commands/customcommands"
@@ -56,7 +56,7 @@ func enginInit() *command.LocalEngine {
 	engine_1.AutoReg.AddProvider(pluginCommands)
 	// 加载插件
 	pluginDir := "./plugins"
-	pluginLoader := plugin.NewPluginLoader(pluginDir)
+	pluginLoader := pc.NewPluginLoader(pluginDir)
 
 	if err := pluginLoader.LoadPlugins(); err != nil {
 		fmt.Printf("Warning: error loading plugins: %v\n", err)
