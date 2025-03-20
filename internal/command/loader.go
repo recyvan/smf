@@ -1,8 +1,7 @@
-package plugin
+package command
 
 import (
 	"fmt"
-	"github.com/recyvan/smf/internal/command"
 	"os"
 	"path/filepath"
 	"plugin"
@@ -11,14 +10,14 @@ import (
 // PluginLoader 插件加载器
 type PluginLoader struct {
 	pluginDir string
-	commands  []command.Ecommand
+	commands  []Ecommand
 }
 
 // NewPluginLoader 创建新的插件加载器
 func NewPluginLoader(pluginDir string) *PluginLoader {
 	return &PluginLoader{
 		pluginDir: pluginDir,
-		commands:  make([]command.Ecommand, 0),
+		commands:  make([]Ecommand, 0),
 	}
 }
 
@@ -65,7 +64,7 @@ func (pl *PluginLoader) loadPlugin(path string) error {
 	}
 
 	// 类型断言
-	provider, ok := symbol.(command.CommandProvider)
+	provider, ok := symbol.(CommandProvider)
 	if !ok {
 		return fmt.Errorf("invalid plugins type: Plugin symbol must implement CommandProvider interface")
 	}
@@ -79,6 +78,6 @@ func (pl *PluginLoader) loadPlugin(path string) error {
 }
 
 // GetCommands 返回所有加载的命令
-func (pl *PluginLoader) GetCommands() []command.Ecommand {
+func (pl *PluginLoader) GetCommands() []Ecommand {
 	return pl.commands
 }

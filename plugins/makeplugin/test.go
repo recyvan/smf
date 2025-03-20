@@ -1,5 +1,3 @@
-package plugins
-
 /*
 # 在 plugins目录下执行->建议进行目录执行
 go mod init datetime
@@ -9,6 +7,8 @@ go mod edit -require github.com/recyvan/smf/internal/command@latest
 go build -buildmode=plugins -o ./datetime.so datetime.go
 确保 datetime.so 在 plugins 目录下
 */
+package main
+
 import (
 	"context"
 	"fmt"
@@ -28,7 +28,7 @@ type plugin struct{}
 func (p plugin) ProvideCommands() []command.Ecommand {
 	return []command.Ecommand{
 		{
-			Name:        "datetime",                                    // 命令名称
+			Name:        "dadatetimewea",                               // 命令名称
 			Description: "Show current date/time and user information", // 命令描述
 			Usage:       "datetime",                                    // 命令用法
 			Type:        "plugins",                                     // 命令类型

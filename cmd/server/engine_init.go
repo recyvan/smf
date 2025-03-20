@@ -5,7 +5,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/recyvan/smf/internal/command"
-	pc "github.com/recyvan/smf/internal/command/plugin"
 	"github.com/recyvan/smf/internal/commands/backgroundcommands"
 	"github.com/recyvan/smf/internal/commands/corecommands"
 	"github.com/recyvan/smf/internal/commands/customcommands"
@@ -29,6 +28,7 @@ type PluginCommandProvider struct {
 func (p *PluginCommandProvider) ProvideCommands() []command.Ecommand {
 	return p.commands
 }
+
 func enginInit() *command.LocalEngine {
 
 	engine_1 := command.NewLocalEngine()
@@ -56,7 +56,7 @@ func enginInit() *command.LocalEngine {
 	engine_1.AutoReg.AddProvider(pluginCommands)
 	// 加载插件
 	pluginDir := "./plugins"
-	pluginLoader := pc.NewPluginLoader(pluginDir)
+	pluginLoader := command.NewPluginLoader(pluginDir)
 
 	if err := pluginLoader.LoadPlugins(); err != nil {
 		fmt.Printf("Warning: error loading plugins: %v\n", err)
@@ -71,8 +71,6 @@ func enginInit() *command.LocalEngine {
 func Run(engine *command.LocalEngine, conn net.Conn) {
 	// 进行本地io重定向
 	rw := NewReadWriter(conn, conn)
-	fmt.Println("Engine Core v1.0.0 (2025-03-15)")
-	fmt.Println("Type 'help' for available commands")
 	fmt.Fprintln(rw, "Engine Core v1.0.0 (2025-03-15)")
 	fmt.Fprintln(rw, "Type 'help' for available commands")
 	defer conn.Close()
