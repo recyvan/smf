@@ -96,7 +96,7 @@ go build -buildmode=plugin -o
 并在Handler中实现后台运行的逻辑。func (rw io.ReadWriter, ctx context.Context, args []string) ([]byte, error)其中rw为脚本的标准输入输出，ctx为上下文，args为命令行参数。
 
 
-- 对于二进制文件，在plugins目录下，按照如下方式进行编写：(so文件还在测试阶段，咱不可用)
+- 对于二进制文件，在plugins目录下，按照如下方式进行编写：(so文件还在测试阶段，暂时不可用)
 > 将脚本编写完成后执行 `go build -o test.so -buildmode=plugin test.go` 编译成so文件，并将so文件放入plugins目录下。
 > 但该功能仅支持linux系统，windows系统暂不支持编译。
 > *注意*，建议下载源码后在plugins下在进行编译，避免依赖包版本问题。
